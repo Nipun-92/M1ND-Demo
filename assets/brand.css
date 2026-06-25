@@ -1,0 +1,591 @@
+/* ============================================================================
+   LEGAL M1ND — MASTER BRAND SYSTEM
+   Single source of truth for both decks, the briefing prototype, and the index.
+   WHY one file: change a colour or font here once and every surface updates,
+   so a co-founder never has to hunt for "where is this styled".
+   Palette is lifted verbatim from the Info Packet v2.2 / generate_stakeholder_doc.py
+   so the presentations match every document already sent to stakeholders.
+   ============================================================================ */
+
+:root {
+  /* --- Core palette (do not invent new colours; reuse these tokens) --- */
+  --navy:        #0D1B3E;   /* primary background / authority */
+  --navy-2:      #122651;   /* slightly lifted panel navy */
+  --navy-3:      #1B3464;   /* card / elevated surface on navy */
+  --gold:        #C89B20;   /* accent — KPIs, highlights, the "intelligence" colour */
+  --gold-soft:   #E2C566;   /* lighter gold for hover / secondary accent */
+  --ice:         #E8EEF7;   /* light-blue background (light surfaces) */
+  --ink:         #0B1426;   /* near-black text on light surfaces */
+  --paper:       #F7F9FC;   /* off-white light surface */
+  --green:       #2E7D4F;   /* success / "live & working" */
+  --red:         #B73B3B;   /* alert / blocker / "not yet" */
+  --amber:       #C98A1F;   /* in-progress */
+  --grey:        #8A93A6;   /* muted text */
+  --line:        rgba(232,238,247,0.14); /* hairline divider on navy */
+
+  /* --- Typography (Editorial-Modern) ---
+     Prefer modern faces if present; degrade gracefully to system fonts so the kit
+     stays 100% offline. To lock the exact look on any machine, drop matching .woff2
+     files into assets/fonts/ and uncomment the @font-face block in the v2 layer below. */
+  --serif: "Fraunces", "Tiempos Headline", "Georgia", "Times New Roman", serif;  /* editorial headlines */
+  --sans:  "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;             /* modern body */
+  --mono:  "IBM Plex Mono", "Consolas", "SF Mono", "Courier New", monospace;     /* data / audit hashes */
+}
+
+/* ============================================================================
+   REVEAL.JS THEME OVERRIDES
+   We vendor reveal.css (structure only) and skin it entirely here.
+   ============================================================================ */
+.reveal {
+  font-family: var(--sans);
+  font-size: 34px;
+  color: var(--ice);
+  font-weight: 400;
+}
+.reveal-viewport {
+  /* layered radial wash + a faint engraved dot-grid gives the navy real depth
+     and a "research terminal" texture instead of a flat, boring fill */
+  background:
+    radial-gradient(1200px 820px at 80% -12%, rgba(200,155,32,0.13), transparent 58%),
+    radial-gradient(1000px 720px at 8% 112%,  rgba(91,124,250,0.14), transparent 55%),
+    radial-gradient(900px 700px at 50% 50%,   rgba(27,52,100,0.45), transparent 70%),
+    linear-gradient(180deg, #0A1530, var(--navy) 60%, #0A1736);
+}
+/* faint dot-grid overlay — subtle, premium, never distracting */
+.reveal-viewport::after{
+  content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.5;
+  background-image: radial-gradient(rgba(232,238,247,0.045) 1px, transparent 1.4px);
+  background-size: 30px 30px;
+  -webkit-mask-image: radial-gradient(circle at 50% 40%, #000 30%, transparent 78%);
+          mask-image: radial-gradient(circle at 50% 40%, #000 30%, transparent 78%);
+}
+.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+  font-family: var(--serif);
+  color: #FFFFFF;
+  text-transform: none;
+  letter-spacing: -0.01em;
+  line-height: 1.12;
+  margin: 0 0 0.4em;
+  text-shadow: none;
+  font-weight: 700;
+}
+.reveal h1 { font-size: 1.95em; }
+.reveal h2 { font-size: 1.45em; }
+.reveal h3 { font-size: 1.05em; color: var(--gold-soft); font-weight: 600; }
+.reveal p, .reveal li { line-height: 1.4; }
+.reveal a { color: var(--gold-soft); text-decoration: none; border-bottom: 1px solid rgba(226,197,102,0.4); }
+.reveal a:hover { color: #fff; }
+.reveal strong { color: #fff; font-weight: 700; }
+.reveal em { color: var(--gold-soft); font-style: normal; }
+
+/* gold accent rule under section headers */
+.reveal h2.ruled::after, .reveal h1.ruled::after {
+  content: ""; display: block; width: 88px; height: 4px;
+  background: var(--gold); margin: 0.45em 0 0; border-radius: 2px;
+}
+
+/* ============================================================================
+   PERSISTENT BRAND FURNITURE (logo + footer on every slide)
+   ============================================================================ */
+.brand-logo {
+  position: fixed; top: 26px; right: 30px; height: 64px; z-index: 40;
+  opacity: 0.96; pointer-events: none;
+}
+.brand-footer {
+  position: fixed; bottom: 16px; left: 30px; right: 30px; top: auto; height: auto; z-index: 40;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--sans); font-size: 13px; color: var(--grey);
+  letter-spacing: 0.06em; text-transform: uppercase; pointer-events: none;
+}
+.brand-footer .conf { color: rgba(183,59,59,0.85); }
+.brand-footer .wm { color: var(--gold-soft); }
+
+/* ============================================================================
+   TITLE / SECTION SLIDES
+   ============================================================================ */
+.title-slide { text-align: left; }
+.title-slide .kicker {
+  font-family: var(--sans); text-transform: uppercase; letter-spacing: 0.32em;
+  font-size: 16px; color: var(--gold); margin-bottom: 22px;
+}
+.title-slide .tagline {
+  font-family: var(--serif); font-style: italic; color: var(--gold-soft);
+  font-size: 0.9em; margin-top: 18px;
+}
+.title-slide .logo-hero { height: 190px; margin-bottom: 8px; }
+
+.section-divider { text-align: left; }
+.section-divider .num {
+  font-family: var(--serif); font-size: 5.2em; color: rgba(200,155,32,0.28);
+  line-height: 1; font-weight: 700;
+}
+.section-divider h2 { font-size: 1.8em; margin-top: -0.1em; }
+
+/* ============================================================================
+   KPI / STAT COMPONENTS
+   ============================================================================ */
+.kpi-row { display: flex; gap: 26px; justify-content: center; flex-wrap: wrap; margin: 0.6em 0; }
+.kpi {
+  background: linear-gradient(180deg, var(--navy-3), var(--navy-2));
+  border: 1px solid var(--line); border-radius: 14px;
+  padding: 26px 30px; min-width: 200px; text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.28);
+}
+.kpi .num {
+  font-family: var(--serif); font-weight: 700; font-size: 2.0em;
+  color: var(--gold); line-height: 1; display: block;
+}
+.kpi .lab {
+  font-family: var(--sans); font-size: 0.5em; color: var(--ice);
+  text-transform: uppercase; letter-spacing: 0.10em; margin-top: 12px; display: block;
+}
+.kpi .sub { font-size: 0.4em; color: var(--grey); margin-top: 6px; display: block; text-transform: none; letter-spacing: 0; }
+
+/* ============================================================================
+   CARDS / GRIDS
+   ============================================================================ */
+.grid { display: grid; gap: 20px; }
+.grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.card {
+  background: linear-gradient(180deg, rgba(27,52,100,0.55), rgba(18,38,81,0.55));
+  border: 1px solid var(--line); border-radius: 14px; padding: 22px 24px;
+  text-align: left;
+}
+.card h3 { margin-top: 0; }
+.card .ico { font-size: 1.6em; margin-bottom: 8px; }
+
+/* ============================================================================
+   INFORMATION vs INTELLIGENCE TABLE
+   ============================================================================ */
+table.compare { width: 100%; border-collapse: collapse; font-size: 0.62em; }
+table.compare th, table.compare td { padding: 14px 18px; text-align: left; vertical-align: top; }
+table.compare thead th { font-family: var(--sans); text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.85em; }
+table.compare thead th:nth-child(2) { color: var(--grey); }
+table.compare thead th:nth-child(3) { color: var(--gold); }
+table.compare tbody tr { border-top: 1px solid var(--line); }
+table.compare td:nth-child(1) { color: var(--gold-soft); font-weight: 600; width: 22%; }
+table.compare td:nth-child(2) { color: var(--grey); width: 39%; }
+table.compare td:nth-child(3) { color: #fff; width: 39%; }
+
+/* ============================================================================
+   STATUS PILLS / BADGES
+   ============================================================================ */
+.pill { display: inline-block; font-family: var(--sans); font-size: 0.5em;
+  padding: 4px 12px; border-radius: 999px; letter-spacing: 0.04em; font-weight: 600; }
+.pill.live    { background: rgba(46,125,79,0.18);  color: #7FD9A2; border: 1px solid rgba(46,125,79,0.5); }
+.pill.prog    { background: rgba(201,138,31,0.18); color: var(--gold-soft); border: 1px solid rgba(201,138,31,0.5); }
+.pill.planned { background: rgba(138,147,166,0.15);color: #B9C2D6; border: 1px solid rgba(138,147,166,0.4); }
+.pill.blocked { background: rgba(183,59,59,0.18);  color: #E78F8F; border: 1px solid rgba(183,59,59,0.5); }
+
+/* ============================================================================
+   BAR / DATA VISUAL (pure CSS — no chart lib, fully offline)
+   ============================================================================ */
+.bars { font-size: 0.5em; }
+.bar-row { display: grid; grid-template-columns: 150px 1fr 70px; align-items: center; gap: 14px; margin: 9px 0; }
+.bar-row .lbl { text-align: right; color: var(--ice); }
+.bar-track { background: rgba(255,255,255,0.06); border-radius: 6px; height: 18px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 6px; width: 0;
+  background: linear-gradient(90deg, var(--gold), var(--gold-soft)); transition: width 1.1s cubic-bezier(.2,.7,.2,1); }
+.bar-fill.blue { background: linear-gradient(90deg, #2E5FB0, #5C8FE0); }
+.bar-fill.green{ background: linear-gradient(90deg, #2E7D4F, #5BB082); }
+.bar-row .val { color: var(--gold-soft); font-family: var(--mono); }
+.reveal .fragment.visible .bar-fill[data-w] { width: var(--bw); }
+
+/* diverging bars for psychometrics (centred at 0) */
+.diverge { font-size: 0.5em; }
+.dv-row { display: grid; grid-template-columns: 160px 1fr; gap: 14px; align-items: center; margin: 8px 0; }
+.dv-track { position: relative; height: 18px; background: rgba(255,255,255,0.05); border-radius: 6px; }
+.dv-track::before { content:""; position:absolute; left:50%; top:0; bottom:0; width:1px; background: rgba(255,255,255,0.25); }
+.dv-fill { position: absolute; top: 0; bottom: 0; border-radius: 4px; }
+
+/* ============================================================================
+   CALLOUTS / CAVEATS / SOURCE CITATIONS  (honesty furniture)
+   ============================================================================ */
+.callout {
+  border-left: 4px solid var(--gold); background: rgba(200,155,32,0.08);
+  padding: 16px 22px; border-radius: 0 10px 10px 0; font-size: 0.62em; text-align: left;
+}
+.callout.warn { border-left-color: var(--red); background: rgba(183,59,59,0.10); }
+.callout.note { border-left-color: #5C8FE0; background: rgba(92,143,224,0.10); }
+.source {
+  font-family: var(--mono); font-size: 0.36em; color: var(--grey);
+  margin-top: 18px; letter-spacing: 0.02em;
+}
+.source::before { content: "◆ source: "; color: var(--gold); }
+
+/* ============================================================================
+   THE ASK / CONTACT
+   ============================================================================ */
+.ask-list { list-style: none; padding: 0; font-size: 0.7em; }
+.ask-list li { padding: 10px 0; border-bottom: 1px solid var(--line); }
+.ask-list li::before { content: "▸ "; color: var(--gold); }
+
+/* ============================================================================
+   CINEMATIC ANIMATIONS — the "pizzazz" layer
+   ============================================================================ */
+
+/* ---- ambient background pulse (subtle, fully offline) ---- */
+@keyframes bgPulse {
+  0%,100% { opacity: 1; }
+  50%      { opacity: .7; }
+}
+.reveal-viewport::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse 200% 120% at 88% 2%,  rgba(200,155,32,.11) 0%, transparent 52%),
+              radial-gradient(ellipse 140%  90% at -5% 105%, rgba(27,52,100,.50)  0%, transparent 52%);
+  animation: bgPulse 14s ease-in-out infinite;
+}
+
+/* ---- headline flash-in ---- */
+@keyframes flashIn {
+  0%   { opacity:0; filter:blur(8px); letter-spacing:.18em; }
+  65%  { opacity:1; filter:blur(0); }
+  100% { opacity:1; letter-spacing:inherit; }
+}
+.flash-in { animation: flashIn .75s cubic-bezier(.2,.8,.2,1) both; }
+
+/* ---- word-up stagger ---- */
+@keyframes wordUp {
+  from { opacity:0; transform:translateY(24px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.w { display:inline-block; opacity:0; animation:wordUp .5s cubic-bezier(.2,.8,.2,1) both; }
+
+/* ---- card pop ---- */
+@keyframes cardPop {
+  0%   { opacity:0; transform:scale(.88) translateY(22px); }
+  68%  { transform:scale(1.03) translateY(-3px); }
+  100% { opacity:1; transform:scale(1) translateY(0); }
+}
+.card-pop { animation: cardPop .6s cubic-bezier(.2,.8,.2,1) both; }
+
+/* ---- gold underline draw ---- */
+@keyframes drawLine { from{width:0} to{width:88px} }
+.reveal h2.ruled::after, .reveal h1.ruled::after {
+  width: 0;
+  animation: drawLine .65s cubic-bezier(.2,.8,.2,1) .2s forwards;
+}
+
+/* ---- horizontal scan light ---- */
+@keyframes hScan {
+  0%  { left:-120%; opacity:.7; }
+  100%{ left:120%;  opacity:0; }
+}
+.scan-bar {
+  position:absolute; top:0; bottom:0; width:200px; pointer-events:none; z-index:2;
+  background:linear-gradient(90deg,transparent,rgba(200,155,32,.2),transparent);
+  animation:hScan 1.6s ease-out .4s forwards;
+}
+
+/* ---- red enemy flash (VS slides) ---- */
+@keyframes vsFlash {
+  0%,100%{ opacity:1; }
+  40%    { opacity:.4; background:rgba(183,59,59,.18); }
+}
+.vs-enemy { animation:vsFlash 1s ease .5s 2; }
+
+/* ---- number pop ---- */
+@keyframes numPop {
+  0%  { transform:scale(.4); opacity:0; }
+  70% { transform:scale(1.18); }
+  100%{ transform:scale(1);   opacity:1; }
+}
+.num-pop { animation:numPop .7s cubic-bezier(.2,.8,.2,1) both; }
+
+/* ---- gold glow pulse ---- */
+@keyframes goldGlow {
+  0%,100%{ text-shadow:none; }
+  50%    { text-shadow:0 0 28px rgba(200,155,32,.6); }
+}
+.glow { animation:goldGlow 2.6s ease-in-out infinite; }
+
+/* ---- timeline node pulse ---- */
+@keyframes nodePulse {
+  0%,100%{ box-shadow:0 0 0 0 rgba(200,155,32,.4); }
+  50%    { box-shadow:0 0 0 10px rgba(200,155,32,0); }
+}
+.node-pulse { animation:nodePulse 2s ease-in-out infinite; }
+
+/* ---- FRAGMENT helpers ---- */
+.reveal .fade-up { opacity:0; transform:translateY(18px); transition:.5s ease; }
+.reveal .fade-up.visible { opacity:1; transform:none; }
+.reveal .highlight-gold { color:var(--gold)   !important; }
+.reveal .highlight-red  { color:#E78F8F !important; }
+
+/* slide number */
+.reveal .slide-number {
+  right:16px; bottom:42px; background:transparent;
+  color:var(--grey); font-family:var(--mono); font-size:13px;
+}
+
+/* print */
+@media print { .reveal-viewport { background:var(--navy) !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
+
+/* ============================================================================
+   ════════════  BRAND v2 — "EDITORIAL-MODERN" LAYER  ════════════
+   Approved direction (2026-06): a mix of (a) Editorial research-house credibility,
+   (b) Modern data-forward signal cards, (c) Refined navy+gold establishment identity.
+   WHY a layered addition (not a rewrite): every v1 class above is preserved, so the
+   existing decks keep working untouched; new surfaces opt into the v2 components.
+   Per-deck emphasis is set with a body class (.deck-gov / .deck-commercial / etc).
+   ============================================================================ */
+:root{
+  /* editorial light surface (reports, document-style slides, profile pages) */
+  --paper-2:  #F7F4EC;   /* warm editorial cream */
+  --ink-2:    #11100E;   /* editorial near-black ink */
+  --ink-soft: #4A4742;   /* muted ink for secondary text on cream */
+  --line-ink: rgba(17,16,14,0.12);  /* hairline on cream */
+  /* a SINGLE restrained modern accent — reserved for DATA-VIZ only, never brand chrome */
+  --accent:   #5B7CFA;   /* controlled indigo */
+  --accent-2: #2DD4BF;   /* controlled teal (secondary series) */
+  --accent-soft: rgba(91,124,250,0.14);
+  /* type scale (modular, ~1.25) for editorial hierarchy */
+  --fs-kicker: 0.62rem; --fs-h3: 1.05rem; --fs-h2: 1.5rem; --fs-h1: 2.2rem;
+}
+
+/* ---- (optional) bundled fonts: drop .woff2 into assets/fonts/ then uncomment ----
+@font-face{font-family:"Fraunces";src:url("fonts/Fraunces.woff2") format("woff2");font-weight:300 900;font-display:swap;}
+@font-face{font-family:"Inter";src:url("fonts/Inter.woff2") format("woff2");font-weight:100 900;font-display:swap;}
+@font-face{font-family:"IBM Plex Mono";src:url("fonts/IBMPlexMono.woff2") format("woff2");font-weight:400 600;font-display:swap;}
+*/
+
+/* ---- refined editorial type rhythm on the dark deck (applies everywhere) ---- */
+.reveal h1,.reveal h2{ font-optical-sizing:auto; font-weight:600; letter-spacing:-0.018em; }
+.reveal .kicker,.title-slide .kicker{ font-weight:600; }
+
+/* ════════ EDITORIAL LIGHT SURFACE ════════
+   Use on report pages / document-style slides: <section class="surface-editorial">
+   or wrap a profile/report page body in .surface-editorial. */
+.surface-editorial{
+  background:var(--paper-2); color:var(--ink-2);
+  font-family:var(--sans); line-height:1.5;
+}
+.surface-editorial h1,.surface-editorial h2,.surface-editorial h3{
+  font-family:var(--serif); color:var(--ink-2); font-weight:600; letter-spacing:-0.015em;
+}
+.surface-editorial .eyebrow{ font-family:var(--sans); text-transform:uppercase;
+  letter-spacing:0.22em; font-size:0.72em; color:var(--gold); font-weight:700; }
+.surface-editorial .lede{ font-family:var(--serif); font-size:1.18em; color:var(--ink-soft); line-height:1.45; }
+.surface-editorial hr{ border:0; border-top:2px solid var(--ink-2); margin:0.6em 0 1em; }
+.surface-editorial .rule-gold{ width:72px; height:4px; background:var(--gold); border-radius:2px; margin:0.4em 0 1em; }
+.surface-editorial blockquote.pull{ font-family:var(--serif); font-size:1.25em; font-style:italic;
+  border-left:4px solid var(--gold); padding:0.2em 0 0.2em 0.8em; color:var(--ink-2); margin:0.6em 0; }
+
+/* ════════ SIGNAL CARD — the WS-A2 display grammar ════════
+   The canonical way EVERY computed signal is shown (deck, report, profile): a score
+   with its neutral label, what it means, what it tells you, why it matters, a graph,
+   and a comparison. Works on dark (default) and on .surface-editorial (light). */
+.signal-card{
+  background:linear-gradient(180deg, var(--navy-3), var(--navy-2));
+  border:1px solid var(--line); border-left:4px solid var(--accent);
+  border-radius:14px; padding:18px 20px; text-align:left;
+  display:grid; grid-template-columns:1fr; gap:8px; box-shadow:0 8px 24px rgba(0,0,0,.22);
+}
+.surface-editorial .signal-card{
+  background:#fff; border:1px solid var(--line-ink); border-left:4px solid var(--accent);
+  box-shadow:0 6px 18px rgba(17,16,14,.06); color:var(--ink-2);
+}
+.signal-card .sc-head{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+.signal-card .sc-label{ font-family:var(--sans); font-weight:600; font-size:0.92em; letter-spacing:.01em; }
+.surface-editorial .signal-card .sc-label{ color:var(--ink-2); }
+.signal-card .sc-score{ font-family:var(--serif); font-weight:700; font-size:1.5em; color:var(--gold); line-height:1; }
+.signal-card .sc-pct{ font-family:var(--mono); font-size:.72em; color:var(--grey); }
+.signal-card .sc-line{ font-size:.8em; line-height:1.4; }
+.signal-card .sc-line b{ color:var(--gold-soft); font-weight:600; }
+.surface-editorial .signal-card .sc-line{ color:var(--ink-soft); }
+.surface-editorial .signal-card .sc-line b{ color:var(--ink-2); }
+.signal-card .sc-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; font-size:.74em; margin-top:4px; }
+.signal-card .sc-grid .k{ text-transform:uppercase; letter-spacing:.08em; font-size:.8em; color:var(--gold); font-weight:700; display:block; margin-bottom:3px; }
+
+/* ── pure-CSS GAUGE (semi-circular fill via conic-gradient) ── */
+.gauge{ --val:0; --max:1; width:120px; height:62px; position:relative; overflow:hidden; margin:2px 0; }
+.gauge::before{ content:""; position:absolute; inset:0 0 -120% 0; border-radius:50%;
+  background:conic-gradient(from 270deg, var(--accent) calc(var(--val)/var(--max)*180deg), rgba(255,255,255,.08) 0 180deg, transparent 180deg); }
+.gauge::after{ content:""; position:absolute; left:18%; right:18%; top:36%; bottom:-120%; border-radius:50%; background:var(--navy-2); }
+.surface-editorial .gauge::after{ background:#fff; }
+.gauge .g-val{ position:absolute; left:0; right:0; bottom:2px; text-align:center; font-family:var(--mono); font-size:13px; color:var(--gold); z-index:2; }
+
+/* ── percentile band (where this subject sits in the cohort) ── */
+.pctband{ position:relative; height:12px; border-radius:6px;
+  background:linear-gradient(90deg, rgba(91,124,250,.25), rgba(200,155,32,.35)); }
+.pctband .mark{ position:absolute; top:-3px; width:3px; height:18px; background:#fff; border-radius:2px; box-shadow:0 0 0 2px var(--navy-2); }
+.surface-editorial .pctband .mark{ box-shadow:0 0 0 2px #fff; background:var(--ink-2); }
+.pctband + .pct-cap{ font-family:var(--mono); font-size:.62em; color:var(--grey); margin-top:4px; display:block; }
+
+/* ── mini trend sparkline (SVG polyline gets stroke via this) ── */
+.spark{ width:100%; height:40px; }
+.spark polyline{ fill:none; stroke:var(--accent); stroke-width:2; vector-effect:non-scaling-stroke; }
+.spark .area{ fill:var(--accent-soft); stroke:none; }
+
+/* ════════ CONSULTANT / HONEST-DISCLAIMER CAPTION (mandatory on behavioral signals) ════════
+   The standing caption per Global Rule 6 + the "consultant, not black-box" framing. */
+.consultant-cap{
+  font-family:var(--sans); font-size:.5em; color:var(--grey); line-height:1.4;
+  border-top:1px dashed var(--line); margin-top:12px; padding-top:8px; letter-spacing:.01em;
+}
+.surface-editorial .consultant-cap{ color:var(--ink-soft); border-top:1px dashed var(--line-ink); }
+.consultant-cap b{ color:var(--gold-soft); font-weight:600; }
+.surface-editorial .consultant-cap b{ color:var(--gold); }
+
+/* ════════ STATUS-FLAG chips for the security/honesty truth-pass ════════ */
+.flag{ display:inline-block; font-family:var(--mono); font-size:.5em; padding:2px 8px; border-radius:5px;
+  letter-spacing:.04em; vertical-align:middle; }
+.flag.f-live{ background:rgba(46,125,79,.18); color:#7FD9A2; border:1px solid rgba(46,125,79,.5); }
+.flag.f-design{ background:rgba(91,124,250,.16); color:#A8BBFF; border:1px solid rgba(91,124,250,.45); }
+.flag.f-road{ background:rgba(138,147,166,.15); color:#B9C2D6; border:1px solid rgba(138,147,166,.4); }
+
+/* ════════ SOURCE FOOTNOTE bar (cited stats — WS-C) ════════ */
+.srcbar{ display:flex; flex-wrap:wrap; gap:6px 18px; font-family:var(--mono); font-size:.42em;
+  color:var(--grey); margin-top:14px; border-top:1px solid var(--line); padding-top:8px; }
+.srcbar a{ color:var(--grey); border-bottom:1px dotted rgba(138,147,166,.5); }
+.srcbar a:hover{ color:var(--gold-soft); }
+.surface-editorial .srcbar{ color:var(--ink-soft); border-top:1px solid var(--line-ink); }
+
+/* ════════ "OLD WAY vs M1ND" animated workflow (WS-D) ════════ */
+.flow{ display:grid; grid-template-columns:1fr 1fr; gap:26px; font-size:.6em; }
+.flow .lane{ border-radius:14px; padding:16px 18px; border:1px solid var(--line); }
+.flow .lane.old{ background:rgba(183,59,59,.08); border-color:rgba(183,59,59,.35); }
+.flow .lane.m1nd{ background:rgba(200,155,32,.08); border-color:rgba(200,155,32,.45); }
+.flow .lane h4{ font-family:var(--sans); text-transform:uppercase; letter-spacing:.12em; font-size:.8em; margin:0 0 10px; }
+.flow .lane.old h4{ color:#E78F8F; } .flow .lane.m1nd h4{ color:var(--gold); }
+.flow .step{ display:flex; gap:10px; align-items:flex-start; padding:7px 0; opacity:0; transform:translateY(10px); transition:.45s ease; }
+.flow .step.visible{ opacity:1; transform:none; }
+.flow .step .dot{ width:10px; height:10px; border-radius:50%; margin-top:5px; flex:0 0 auto; }
+.flow .lane.old .dot{ background:#B73B3B; } .flow .lane.m1nd .dot{ background:var(--gold); }
+
+/* ════════ PER-DECK EMPHASIS (same tokens, different weighting) ════════
+   .deck-gov → institutional/editorial gravitas; .deck-commercial/.deck-investors → data-forward;
+   .deck-partners → balanced. Set on <body>. */
+body.deck-gov .reveal h1, body.deck-gov .reveal h2{ font-weight:600; letter-spacing:-0.012em; }
+body.deck-gov .signal-card{ border-left-color:var(--gold); }          /* govt: gold, not indigo (no "tech" accent) */
+body.deck-commercial .signal-card, body.deck-investors .signal-card{ border-left-color:var(--accent); }
+body.deck-commercial .kpi .num, body.deck-investors .kpi .num{ font-family:var(--serif); }
+
+/* responsive: signal cards + flow stack on narrow / mobile (solo section) */
+@media (max-width:760px){
+  .flow{ grid-template-columns:1fr; }
+  .signal-card .sc-grid{ grid-template-columns:1fr; }
+}
+
+/* ============================================================================
+   ════════════  BRAND v2.1 — VISUAL POLISH + INTERACTIVE  ════════════
+   Premium, less-monotonous look: accent-edged cards, stronger KPIs, headline
+   gradient, clickable expandable cards, refined editorial surface. All additive.
+   ============================================================================ */
+
+/* ---- headline polish: optional gold gradient on hero H1 ---- */
+.reveal h1.grad{
+  background:linear-gradient(92deg,#FFFFFF 25%, var(--gold-soft) 70%, var(--gold));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  -webkit-text-fill-color:transparent;
+}
+.reveal .eyebrow{ font-family:var(--sans); text-transform:uppercase; letter-spacing:.28em;
+  font-size:.5em; color:var(--gold); font-weight:700; display:inline-block; margin-bottom:.6em; }
+.reveal .eyebrow::before{ content:"— "; color:var(--gold-soft); }
+
+/* ---- CARD upgrade: top accent hairline, depth, hover lift ---- */
+.card{ position:relative; overflow:hidden; transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  box-shadow:0 10px 30px rgba(0,0,0,.26); }
+.card::before{ content:""; position:absolute; left:0; right:0; top:0; height:3px;
+  background:linear-gradient(90deg, var(--gold), transparent 70%); opacity:.85; }
+.card:hover{ transform:translateY(-4px); border-color:rgba(200,155,32,.45);
+  box-shadow:0 18px 44px rgba(0,0,0,.42); }
+.card .ico{ display:inline-grid; place-items:center; width:46px; height:46px; border-radius:12px;
+  background:rgba(200,155,32,.12); border:1px solid rgba(200,155,32,.3); font-size:1.3em; margin-bottom:12px; }
+
+/* ---- KPI upgrade: larger figure, gold underline, accent tick ---- */
+.kpi{ position:relative; overflow:hidden; }
+.kpi::after{ content:""; position:absolute; left:50%; bottom:0; transform:translateX(-50%);
+  width:46px; height:3px; background:var(--gold); border-radius:2px; }
+.kpi .num{ font-size:2.3em; letter-spacing:-0.02em; }
+.kpi:hover{ border-color:rgba(200,155,32,.4); }
+
+/* ---- EXPANDABLE CARDS → SHARED DETAIL PANE ----
+   WHY this pattern: Reveal slides are a fixed 1280x720 canvas with NO scroll, so
+   expanding a card "in place" pushes content off-slide and it gets clipped. Instead:
+   a row of compact cards sits up top, and ONE detail pane below fills (and scrolls
+   internally) with the clicked card's content. Nothing ever overflows the slide.
+   Markup:  <div class="xwrap"><div class="xgrid cols-3"> …cards… </div>
+              <div class="xpane"></div></div>
+   Each card: <div class="xcard" onclick="toggleCard(this)"> …summary…
+                <div class="xc-detail"><h4>Title</h4><ul><li>…</li></ul></div></div>  */
+.xwrap{ display:grid; gap:14px; }
+.xgrid{ display:grid; gap:13px; }
+.xgrid.cols-2{ grid-template-columns:1fr 1fr; }
+.xgrid.cols-3{ grid-template-columns:repeat(3,1fr); }
+.xgrid.cols-4{ grid-template-columns:repeat(4,1fr); }
+.xwrap{ pointer-events:auto; }
+.xcard{ position:relative; cursor:pointer; pointer-events:auto; text-align:left; border-radius:12px; padding:13px 15px;
+  background:linear-gradient(180deg, rgba(27,52,100,.6), rgba(18,38,81,.66));
+  border:1px solid var(--line); border-top:3px solid var(--gold);
+  transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; box-shadow:0 8px 22px rgba(0,0,0,.24); }
+.xcard:hover{ transform:translateY(-3px); border-color:rgba(200,155,32,.5); box-shadow:0 14px 34px rgba(0,0,0,.4); }
+.xcard.active{ border-top-color:var(--gold-soft); box-shadow:0 0 0 1px var(--gold), 0 14px 34px rgba(0,0,0,.45); }
+.xcard .xc-head{ display:flex; align-items:center; gap:9px; }
+.xcard .xc-head .ico{ width:30px; height:30px; flex:0 0 auto; color:var(--gold); }
+.xcard .xc-head .ico svg{ width:100%; height:100%; display:block; }
+.xcard h3{ margin:0; font-size:.62em; line-height:1.2; flex:1; font-weight:600; }
+.xcard .xc-toggle{ font-family:var(--mono); font-size:.4em; color:var(--gold-soft); opacity:.8; white-space:nowrap; }
+.xcard.active .xc-toggle{ color:#fff; }
+.xcard .xc-sum{ font-size:.48em; color:var(--ice); margin:8px 0 0; line-height:1.4; }
+.xcard .xc-stat{ font-family:var(--serif); color:var(--gold); font-size:.62em; font-weight:700; margin-top:6px; display:block; line-height:1.25; }
+.xcard .xc-detail{ display:none; }   /* source content — JS renders it into the .xpane */
+.xpane{ border:1px solid var(--line); border-left:3px solid var(--gold); border-radius:12px;
+  background:rgba(9,16,34,.6); max-height:0; overflow:hidden; opacity:0; padding:0 22px;
+  transition:max-height .4s ease, opacity .3s ease, padding .35s ease; }
+.xpane.show{ max-height:320px; overflow-y:auto; overflow-x:hidden; opacity:1; padding:14px 20px; }
+.xpane h4{ margin:0 0 10px; font-family:var(--sans); font-size:.62em; letter-spacing:.04em; color:var(--gold-soft); text-transform:uppercase; }
+.xpane ul{ margin:0; padding-left:1.1em; } .xpane li{ margin:7px 0; line-height:1.5; color:var(--ice); font-size:.56em; }
+.surface-editorial .xpane, .reveal section.editorial .xpane{ background:rgba(0,0,0,.22); }
+
+/* ---- signal-card premium glow on the accent edge ---- */
+.signal-card{ position:relative; }
+.signal-card::after{ content:""; position:absolute; left:-1px; top:14px; bottom:14px; width:4px; border-radius:4px;
+  background:linear-gradient(180deg,var(--accent),transparent); filter:blur(3px); opacity:.6; }
+body.deck-gov .signal-card::after{ background:linear-gradient(180deg,var(--gold),transparent); }
+
+/* ---- confidence chip for signals ("HIGH · 84%") ---- */
+.conf-chip{ display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:.6em;
+  padding:3px 10px; border-radius:999px; background:rgba(46,125,79,.16); color:#7FD9A2; border:1px solid rgba(46,125,79,.45); }
+.conf-chip.med{ background:rgba(201,138,31,.16); color:var(--gold-soft); border-color:rgba(201,138,31,.45); }
+.conf-chip .dot{ width:7px; height:7px; border-radius:50%; background:currentColor; }
+
+/* ---- EDITORIAL light surface polish (for content/report slides) ---- */
+.surface-editorial{ position:relative; }
+.surface-editorial .card{ background:#fff; border:1px solid var(--line-ink); color:var(--ink-2); box-shadow:0 8px 22px rgba(17,16,14,.07); }
+.surface-editorial .card::before{ background:linear-gradient(90deg,var(--gold),transparent 70%); }
+.surface-editorial .card h3{ color:var(--ink-2); }
+.surface-editorial p,.surface-editorial li{ color:var(--ink-soft); }
+.surface-editorial .kpi{ background:#fff; border:1px solid var(--line-ink); color:var(--ink-2); box-shadow:0 8px 22px rgba(17,16,14,.07); }
+.surface-editorial .kpi .lab{ color:var(--ink-soft); }
+.surface-editorial .xcard{ background:#fff; border:1px solid var(--line-ink); border-top:3px solid var(--gold); color:var(--ink-2); box-shadow:0 8px 22px rgba(17,16,14,.07); }
+.surface-editorial .xcard .xc-sum{ color:var(--ink-2); } .surface-editorial .xcard .xc-detail{ color:var(--ink-soft); }
+/* ---- DECK "editorial" slides → calm DARK-editorial (NOT bright white) ----
+   A bright full-screen slide between dark slides is jarring on a monitor/projector.
+   So deck editorial slides use a warm espresso background (set the SECTION's
+   data-background-color="#15140F") with cream serif text — a "library / intelligence
+   brief" feel, distinct from the navy data slides, with zero eye strain.
+   (The LIGHT .surface-editorial above stays light — it's for close-read report/
+   profile PAGES, not projected slides.) */
+.reveal section.editorial{ color:#EAE2CE; }
+.reveal section.editorial h1,.reveal section.editorial h2{ color:#F4EEDE; font-family:var(--serif); }
+.reveal section.editorial h2.ruled::after{ background:var(--gold); }
+.reveal section.editorial h3,.reveal section.editorial .eyebrow{ color:var(--gold-soft); }
+.reveal section.editorial p,.reveal section.editorial li,.reveal section.editorial td{ color:#D2CAB7; }
+.reveal section.editorial strong{ color:#FFF7E6; }
+.reveal section.editorial .callout{ background:rgba(200,155,32,.12); border-left-color:var(--gold); color:#EAE2CE; }
+.reveal section.editorial .srcbar,.reveal section.editorial .source{ color:#9a927f; border-top-color:rgba(234,226,206,.16); }
+.reveal section.editorial table.compare th{ color:#F4EEDE; }
+.reveal section.editorial .card{ background:rgba(255,255,255,.04); border:1px solid rgba(234,226,206,.18); color:#EAE2CE; }
+/* WHY neutral: card h3 is gold by default on dark slides; on the warm espresso editorial
+   bg that reads as "random gold everywhere" — use cream so it reads as hierarchy, not accent */
+.reveal section.editorial .card h3{ color:#F0E8D5; font-weight:600; }
+.reveal section.editorial .card::before{ opacity:.35; }       /* soften the gold accent hairline */
+/* xcard border-top is 3px solid gold — prominent; soften it on editorial slides */
+.reveal section.editorial .xcard{ border-top-color: rgba(200,155,32,.45); }
+.reveal section.editorial .xcard.active{ border-top-color: var(--gold-soft); }
+
+/* ---- comparison "VS" table polish ---- */
+table.compare tbody tr:hover{ background:rgba(200,155,32,.06); }
+table.compare td:nth-child(3){ border-left:2px solid rgba(200,155,32,.25); }
