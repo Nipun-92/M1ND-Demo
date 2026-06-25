@@ -1,7 +1,7 @@
 # M1ND Intelligence Briefing Demo
 
 **Live URL:** https://demo.m1nd.in  
-**Default passphrase:** `M1ND2026`
+**Default passphrase:** `
 
 ---
 
