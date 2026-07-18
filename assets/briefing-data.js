@@ -10,8 +10,11 @@ const BRIEFING_DATA = {
     ner_entities: 4227209, rr_sentences: 3833583,
     citations_total: 770045, citations_linked_pct: 47.5,
     citations_linked_n: 365687,
+    legal_actors: 220414, parties: 170521, organisations: 39188,
+    hearings: 43491, sections: 58552, precedents: 11625,
+    micro_signals: 2892, composite_signals: 1112, instruments: 8, fused_layers: 7,
     courts: ["Patna High Court (2016–2024)", "High Court of Gujarat (2019–2023)"],
-    generated: "2026-06-15"
+    generated: "2026-07-18"
   },
 
   // ── JUDGE (Decision-Maker Profile) ──────────────────────────────────────────

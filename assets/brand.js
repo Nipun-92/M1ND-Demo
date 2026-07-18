@@ -7,7 +7,7 @@
    ============================================================================ */
 
 /* ---- 1. KPI COUNT-UP -------------------------------------------------------
-   Any element with class .count-up and data-target="157508" (optional
+   Any element with class .count-up and data-target="162848" (optional
    data-suffix, data-decimals, data-prefix) animates from 0 to target when it
    first scrolls/reveals into view. Used for the big headline numbers. */
 function animateCount(el) {
