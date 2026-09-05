@@ -44,7 +44,7 @@ const BRIEFING_DATA = {
     judge1: "Judge A", judge2: "Judge B",
     shared_cases: 1711, j1_auth_pct: 64, j2_auth_pct: 36,
     other_pairs: [
-      { j1:"ILESH", j2:"VORA", n:931 },
+      { j1:"Judge I", j2:"Judge J", n:931 },
       { j1:"Judge F", j2:"Judge B", n:584 },
       { j1:"Judge G", j2:"Judge H", n:351 }
     ]
