@@ -46,7 +46,7 @@ const BRIEFING_DATA = {
     other_pairs: [
       { j1:"ILESH", j2:"VORA", n:931 },
       { j1:"Judge F", j2:"Judge B", n:584 },
-      { j1:"ASHUTOSH KUMAR", j2:"HARISH KUMAR", n:351 }
+      { j1:"Judge G", j2:"Judge H", n:351 }
     ]
   },
 
