@@ -52,7 +52,7 @@ const BRIEFING_DATA = {
 
   // ── COUNSEL (real data for top litigators) ──────────────────────────────────
   lawyer: {
-    // PETITIONER COUNSEL (real DB: lawyer_id=<illustrative>, Counsel B, 2254 appearances)
+    // PETITIONER COUNSEL (illustrative: lawyer_id withheld, Counsel B, 2254 appearances)
     pet_name: "Counsel B", pet_id: 0, pet_appearances: 2254,
     pet_firm: "Independent, Patna HC",
     pet_judge_affinity: [
@@ -66,7 +66,7 @@ const BRIEFING_DATA = {
     pet_archetype_chips: ["Document-heavy", "High consistency", "Merits-first"],
     pet_win_note: "Outcome data available — role-inference caveat applies; use as pattern signal only",
 
-    // OPPOSING COUNSEL (real DB: lawyer_id=<illustrative>, Counsel A, 2476 appearances)
+    // OPPOSING COUNSEL (illustrative: lawyer_id withheld, Counsel A, 2476 appearances)
     name: "Counsel A", lawyer_id: <illustrative>, appearances: 2476,
     firm: "Independent, Patna HC",
     judge_affinity: [
