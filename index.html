@@ -2321,6 +2321,40 @@ document.getElementById("gate-pw").addEventListener("keydown",e=>{if(e.key==="En
 async function checkGate(){const pw=document.getElementById("gate-pw").value.trim();if(!pw)return;const h=await sha256(pw);if(h===PASSPHRASE_HASH){const g=document.getElementById("m1nd-gate");g.classList.add("hidden");setTimeout(()=>g.remove(),600);}else{const i=document.getElementById("gate-pw");i.classList.remove("shake");void i.offsetWidth;i.classList.add("shake");i.value="";document.getElementById("gate-err").textContent="Incorrect passphrase. Please try again.";setTimeout(()=>i.classList.remove("shake"),500);}}
 window.addEventListener("load",()=>{setTimeout(()=>document.getElementById("gate-pw").focus(),200);});
 </script>
+
+<!-- m1nd-stats-runtime: the numbers come from stats.json, which is generated
+     from the database. The values baked into the HTML above are the fallback,
+     so the page is never WRONG when this fetch fails - only less fresh. -->
+<script>
+(function () {
+  fetch('stats.json', { cache: 'no-cache' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (s) {
+      if (!s || !s.figures) return;
+      var f = s.figures;
+      document.querySelectorAll('[data-stat]').forEach(function (el) {
+        var v = f[el.getAttribute('data-stat')];
+        if (v === undefined || v === null) return;
+        var fmt = el.getAttribute('data-fmt');
+        if (fmt === 'millions') v = (v / 1e6).toFixed(1);
+        else if (fmt === 'pct')  v = Number(v).toFixed(1);
+        else v = String(Math.round(v));
+        el.setAttribute('data-target', v);
+        // If the count-up already ran, show the fresh value immediately.
+        if (el.textContent.trim() !== '0') el.textContent = v;
+      });
+      if (s.sub_labels) {
+        document.querySelectorAll('[data-stat]').forEach(function (el) {
+          var card = el.parentElement;
+          var sub = card && card.querySelector('.s');
+          var t = s.sub_labels[el.getAttribute('data-stat')];
+          if (sub && t) sub.textContent = t;
+        });
+      }
+    })
+    .catch(function () { /* the baked-in values stand */ });
+})();
+</script>
 </body>
 </html>
 
