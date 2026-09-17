@@ -1,20 +1,21 @@
 /* ============================================================================
    briefing-data.js — LIVE DATA from Postgres DB
-   Regenerated: 2026-06-15  |  All figures traceable to formula_registry
+   Regenerated: 2026-09-17  |  All figures traceable to formula_registry
    ============================================================================ */
 const BRIEFING_DATA = {
 
   corpus: {
-    cases: 162848, judges: 111, lawyers: 10594,
-    interpretations: 47907, outcomes: 160228,
-    ner_entities: 4227209, rr_sentences: 3833583,
-    citations_total: 770045, citations_linked_pct: 47.5,
-    citations_linked_n: 365687,
-    legal_actors: 220414, parties: 170521, organisations: 39188,
-    hearings: 43491, sections: 58552, precedents: 11625,
-    micro_signals: 2892, composite_signals: 1112, instruments: 8, fused_layers: 7,
-    courts: ["Patna High Court (2016–2024)", "High Court of Gujarat (2019–2023)"],
-    generated: "2026-07-18"
+    cases: 265736, judges: 1997, lawyers: 84792,
+    interpretations: 143849, outcomes: 311488,
+    ner_entities: 18541371, rr_sentences: 15403760,
+    citations_total: 1378382, citations_linked_pct: 69.4,
+    citations_linked_n: 956476,
+    legal_actors: 225976, parties: 284884, organisations: 139187,
+    hearings: 135281, sections: 48150, precedents: 176652,
+    micro_signals: 919, composite_signals: 1112, instruments: 8, fused_layers: 7,
+    courts: ["Patna High Court", "High Court of Delhi", "High Court for State of Telangana", "High Court of Gujarat", "Supreme Court of India", "Bombay High Court"],
+    coverage: "six courts · 2021–2025",
+    generated: "2026-09-17"
   },
 
   // ── JUDGE (Decision-Maker Profile) ──────────────────────────────────────────
