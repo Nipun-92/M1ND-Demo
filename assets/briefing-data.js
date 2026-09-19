@@ -12,7 +12,7 @@ const BRIEFING_DATA = {
     citations_linked_n: 956476,
     legal_actors: 225976, parties: 284884, organisations: 139187,
     hearings: 135281, sections: 48150, precedents: 176652,
-    micro_signals: 919, composite_signals: 1112, instruments: 8, fused_layers: 7,
+    micro_signals: 4709, composite_signals: 1932, instruments: 8, fused_layers: 7,
     courts: ["Patna High Court", "High Court of Delhi", "High Court for State of Telangana", "High Court of Gujarat", "Supreme Court of India", "Bombay High Court"],
     coverage: "six courts · 2021–2025",
     generated: "2026-09-17"
