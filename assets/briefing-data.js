@@ -5,13 +5,13 @@
 const BRIEFING_DATA = {
 
   corpus: {
-    cases: 265736, judges: 1997, lawyers: 84792,
+    cases: 265739, judges: 1997, lawyers: 84793,
     interpretations: 143849, outcomes: 311488,
-    ner_entities: 18541371, rr_sentences: 15403760,
-    citations_total: 1378382, citations_linked_pct: 69.4,
+    ner_entities: 18541446, rr_sentences: 15403840,
+    citations_total: 1378386, citations_linked_pct: 69.4,
     citations_linked_n: 956476,
-    legal_actors: 225976, parties: 284884, organisations: 139187,
-    hearings: 135281, sections: 48150, precedents: 176652,
+    legal_actors: 225978, parties: 284886, organisations: 139188,
+    hearings: 135282, sections: 48150, precedents: 176652,
     micro_signals: 4709, composite_signals: 1932, instruments: 8, fused_layers: 7,
     courts: ["Patna High Court", "High Court of Delhi", "High Court for State of Telangana", "High Court of Gujarat", "Supreme Court of India", "Bombay High Court"],
     coverage: "six courts · 2021–2025",
